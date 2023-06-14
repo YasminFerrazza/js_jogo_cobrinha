@@ -23,29 +23,29 @@ let food = {
 
 // Função para criar o Background
 function criarBG() {
-    context.fillStyle = "plum";
+    context.fillStyle = "green";
     // Desenhe o retângulo usando x e y e a largura e a altura setadas
     context.fillRect(0, 0, 16 * box, 16 * box);
 }
 
 // Função para criar cobrinha
-function criarCobrinha () {
-    for(i= 0; i < snake.length; i++){
-        context.fillStyle = "pink";
-        context.fillRect (snake[i].x, snake[i].y, box, box);
+function criarCobrinha() {
+    for (i = 0; i < snake.length; i++) {
+        context.fillStyle = "lightgreen";
+        context.fillRect(snake[i].x, snake[i].y, box, box);
     }
 }
 
 // Funçaõ para desenhar comimda
-function drawFood () {
-    context.fillStyle = "purple";
-    context.fillRect (food.x, food.y, box, box);
+function drawFood() {
+    context.fillStyle = "red";
+    context.fillRect(food.x, food.y, box, box);
 }
 
 //Quando um evento acontece, detecta e chama a função update
 document.addEventListener('keydown', update);
 
-function update (event) {
+function update(event) {
     if (event.keyCode == 37 && direction != 'right') direction
         = 'left';
     if (event.keyCode == 38 && direction != 'down') direction
@@ -57,7 +57,7 @@ function update (event) {
 }
 
 // Função principal
-function iniciarJogo () {
+function iniciarJogo() {
     if (snake[0].x > 15 * box && direction == "right") {
         snake[0].x = 0;
     }
@@ -74,15 +74,15 @@ function iniciarJogo () {
     }
 
     for (i = 1; i < snake.length; i++) {
-        if(snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
-            clearInterval (jogo);
-            alert ('Game Over :(');
+        if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+            clearInterval(jogo);
+            alert('Game Over :(');
         }
     }
 
-    criarBG( );
-    criarCobrinha( );
-    drawFood( );
+    criarBG();
+    criarCobrinha();
+    drawFood();
 
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
@@ -94,17 +94,44 @@ function iniciarJogo () {
 
     if (snakeX != food.x || snakeY != food.y) {
         snake.pop(); //"pop" tira o último elemento da lista
-    }else{
-        food.x = Math.floor(Math.random() * 15 +1) * box;
-        food.y = Math.floor(Math.random() * 15 +1) * box; 
+    } else {
+        food.x = Math.floor(Math.random() * 15 + 1) * box;
+        food.y = Math.floor(Math.random() * 15 + 1) * box;
     }
 
-    let newHead ={
+
+    let newHead = {
         x: snakeX,
         y: snakeY
     }
 
-    snake.unshift(newHead); //método unshift adiciona como primeiro quadradinho da cobrinha
+    //método unshift adiciona como
+    //primeiro quadradinho da cobrinha
+    snake.unshift(newHead);
+
+    if (pontos != snake.length - 1) {
+        pontos++;
+        document.getElementById('pontuacao').innerText = pontos;
+    }
+
+    if (pontos == pontosProximaFase) {
+        fase++;
+        pontosProximaFase = pontosProximaFase + pontosPorFase;
+
+        time = time - (pontosPorFase * 10);
+
+        clearInterval(jogo);
+        jogo = setInterval(iniciarJogo, time);
+
+        document.getElementById('fase').innerText = fase;
+        document.getElementById('velocidade').innerText = time;
+    }
 }
 
-let jogo = setInterval (iniciarJogo, 150);
+let time = 200;
+let jogo = setInterval(iniciarJogo, time);
+
+let pontos = 0;
+let pontosPorFase = 2
+let pontosProximaFase = pontosPorFase;
+let fase = 1;

@@ -3,4 +3,10 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    background-image: url(imagens-de-arvore-mundo-bita-png-12.png);
+    background-size: 30%;
+    background-repeat: no-repeat;
+
+    background-color: lightgreen;
 }
